@@ -37,4 +37,4 @@ jobs:
           bundler-cache: true
 
       - name: Run tests
-        run: bundle exec rspec --format documentation
+        run: bundle exec rspec --format documentation spec/test_spec.rb
