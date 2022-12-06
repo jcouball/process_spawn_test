@@ -5,6 +5,7 @@ describe 'Process#wait' do
     pid = Process.spawn('exit 0')
     Process.wait(pid)
     expect($CHILD_STATUS).not_to be_nil
+    expect($CHILD_STATUS.pid).to eq(pid)
   end
 end
 
@@ -13,5 +14,6 @@ describe 'Process#wait2' do
     pid = Process.spawn('exit 0')
     exited_pid, status = Process.wait2(pid)
     expect(status).not_to be_nil
+    expect(status.pid).to eq(pid)
   end
 end
