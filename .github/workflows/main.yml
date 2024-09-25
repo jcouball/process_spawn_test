@@ -23,7 +23,7 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
 
     env:
-      JAVA_OPTS: -Djdk.io.File.enableADS=true
+      JAVA_OPTS: -Djdk.io.File.enableADS=true --add-opens java.base/java.lang=org.jruby.dist
       JRUBY_OPTS: --debug -Xnative.verbose=true
 
     steps:
