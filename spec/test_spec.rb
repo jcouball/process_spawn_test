@@ -19,6 +19,15 @@ RSpec.describe 'Process#wait2' do
   end
 end
 
+RSpec.describe 'Process.spawn with a single command argument' do
+  it 'should spawn a process via the system shell' do
+    pid = Process.spawn('exit 0')
+    _pid, status = Process.wait2(pid)
+    expect(status).not_to be_nil
+    expect(status.exitstatus).to eq(0)
+  end
+end
+
 RSpec.describe 'Process.spawn chdir: option' do
   let(:script_path) { File.expand_path('bin/command-line-test') }
 
@@ -31,7 +40,7 @@ RSpec.describe 'Process.spawn chdir: option' do
       end
     end
 
-    it 'raises an error' do
+    it 'should raise an error' do
       skip "JRuby does not support the chdir: option to Process.spawn" if jruby?
       expect {
         pid = Process.spawn('ruby', script_path, chdir: 'invalid/directory')
