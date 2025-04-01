@@ -13,7 +13,7 @@ end
 RSpec.describe 'Process#wait2' do
   it 'should return a non-nil status' do
     pid = Process.spawn('ruby', 'bin/command-line-test')
-    exited_pid, status = Process.wait2(pid)
+    _pid, status = Process.wait2(pid)
     expect(status).not_to be_nil
     expect(status.pid).to eq(pid)
   end
@@ -34,7 +34,9 @@ RSpec.describe 'Process.spawn chdir: option' do
     it 'raises an error' do
       skip "JRuby does not support the chdir: option to Process.spawn" if jruby?
       expect {
-        Process.spawn('ruby', script_path, chdir: 'invalid/directory')
+        pid = Process.spawn('ruby', script_path, chdir: 'invalid/directory')
+        _pid, status = Process.wait2(pid)
+        puts status
       }.to raise_error(Errno::ENOENT)
     end
   end
