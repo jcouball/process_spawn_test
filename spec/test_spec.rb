@@ -69,7 +69,9 @@ RSpec.describe 'Process.spawn chdir: option' do
     end
 
     it 'should raise Errno::ENOTDIR' do
-      expect { subject }.to raise_error(Errno::ENOTDIR)
+      # Annoyingly, the error raised is different on Windows
+      expected_error = windows? ? Errno::EINVAL : Errno::ENOTDIR
+      expect { subject }.to raise_error(expected_error)
     end
 
     context 'on truffleruby', if: truffleruby? do
