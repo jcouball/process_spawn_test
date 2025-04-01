@@ -29,24 +29,53 @@ RSpec.describe 'Process.spawn with a single command argument' do
 end
 
 RSpec.describe 'Process.spawn chdir: option' do
-  let(:script_path) { File.expand_path('bin/command-line-test') }
-
-  context 'with an invalid directory' do
-    around do |example|
-      Dir.mktmpdir do |dir|
-        Dir.chdir(dir) do
-          example.run
-        end
+  around do |example|
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        example.run
       end
     end
+  end
 
-    it 'should raise an error' do
-      skip "JRuby does not support the chdir: option to Process.spawn" if jruby?
-      expect {
-        pid = Process.spawn('ruby', script_path, chdir: 'invalid/directory')
-        _pid, status = Process.wait2(pid)
-        puts status
-      }.to raise_error(Errno::ENOENT)
+  # The value of subject will be a Process::Status
+  subject do
+    Process.spawn('ruby', script_path, chdir: chdir_path)
+    _pid, status = Process.wait2(pid)
+    status
+  end
+
+  # Since we chdir in the test, make sure the script path is correct
+  let(:script_path) { File.expand_path('../bin/command-line-test', __dir__) }
+
+  context 'with an invalid directory' do
+    let(:chdir_path) { 'does_not_exist' }
+
+    it 'should raise ERRNO::ENOENT' do
+      expect { subject }.to raise_error(Errno::ENOENT)
+    end
+
+    context 'on truffleruby', if: truffleruby? do
+      it 'incorrectly returns a non-zero exitstatus without raising an error' do
+        expect(subject).to have_attributes(exitstatus: 1)
+      end
+    end
+  end
+
+  context 'with a path to a file' do
+    let(:chdir_path) { 'file1.txt' }
+
+    before do
+      File.write(chdir_path, 'contents')
+    end
+
+    it 'should raise Errno::ENOTDIR' do
+      expect { subject }.to raise_error(Errno::ENOTDIR)
+    end
+
+    context 'on truffleruby', if: truffleruby? do
+      it 'incorrectly returns a non-zero exitstatus without raising an error' do
+        expect(subject).to have_attributes(exitstatus: 1)
+      end
     end
   end
 end
