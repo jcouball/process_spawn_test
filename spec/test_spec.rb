@@ -39,7 +39,7 @@ RSpec.describe 'Process.spawn chdir: option' do
 
   # The value of subject will be a Process::Status
   subject do
-    Process.spawn('ruby', script_path, chdir: chdir_path)
+    pid = Process.spawn('ruby', script_path, chdir: chdir_path)
     _pid, status = Process.wait2(pid)
     status
   end
