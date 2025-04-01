@@ -32,6 +32,7 @@ RSpec.describe 'Process.spawn chdir: option' do
     end
 
     it 'raises an error' do
+      skip "JRuby does not support the chdir: option to Process.spawn" if jruby?
       expect {
         Process.spawn('ruby', script_path, chdir: 'invalid/directory')
       }.to raise_error(Errno::ENOENT)
