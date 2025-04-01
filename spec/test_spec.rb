@@ -1,7 +1,7 @@
 require 'English'
 require 'tmpdir'
 
-describe 'Process#wait' do
+RSpec.describe 'Process#wait' do
   it 'should set the global $CHILD_STATUS variable' do
     pid = Process.spawn('ruby', 'bin/command-line-test')
     Process.wait(pid)
@@ -10,7 +10,7 @@ describe 'Process#wait' do
   end
 end
 
-describe 'Process#wait2' do
+RSpec.describe 'Process#wait2' do
   it 'should return a non-nil status' do
     pid = Process.spawn('ruby', 'bin/command-line-test')
     exited_pid, status = Process.wait2(pid)
@@ -19,7 +19,7 @@ describe 'Process#wait2' do
   end
 end
 
-describe 'Process.spawn chdir: option' do
+RSpec.describe 'Process.spawn chdir: option' do
   let(:script_path) { File.expand_path('bin/command-line-test') }
 
   context 'with an invalid directory' do
