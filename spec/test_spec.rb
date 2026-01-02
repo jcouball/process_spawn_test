@@ -29,6 +29,7 @@ RSpec.describe 'Process.spawn with a single command argument' do
 end
 
 RSpec.describe 'Process.spawn chdir: option' do
+  # Execute tests in a temporary directory
   around do |example|
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
@@ -44,7 +45,7 @@ RSpec.describe 'Process.spawn chdir: option' do
     status
   end
 
-  # Since we chdir in the test, make sure the script path is correct
+  # Since we chdir in the test, make sure the path to the script is absolute
   let(:script_path) { File.expand_path('../bin/command-line-test', __dir__) }
 
   context 'with an invalid directory' do
@@ -69,7 +70,7 @@ RSpec.describe 'Process.spawn chdir: option' do
     end
 
     it 'should raise Errno::ENOTDIR' do
-      # Annoyingly, the error raised is different on Windows
+      # Annoyingly, the error raised is different on MRI Windows
       expected_error = windows? ? Errno::EINVAL : Errno::ENOTDIR
       expect { subject }.to raise_error(expected_error)
     end
