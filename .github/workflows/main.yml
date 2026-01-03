@@ -43,5 +43,10 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
+      - name: Show Java version
+        if: startsWith(matrix.ruby, 'jruby')
+        run: |
+          ruby -e "puts \"Java version: #{java.lang.System.getProperty('java.version')}\""
+
       - name: Run tests
         run: bundle exec rspec --format documentation spec/test_spec.rb
