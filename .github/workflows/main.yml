@@ -1,4 +1,6 @@
-name: Ruby
+name: Process.spawn Test
+
+# Test that Process.spawn sets status correctly on JRuby for Windows
 
 on:
   push:
