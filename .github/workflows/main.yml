@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["4.0", "jruby-10"]
+        ruby: ["ruby", "jruby"]
         operating-system: [ubuntu-latest, windows-latest]
 
     name: Ruby ${{ matrix.ruby }} on ${{ matrix.operating-system }}
