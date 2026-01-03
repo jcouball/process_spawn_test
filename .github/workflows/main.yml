@@ -46,7 +46,7 @@ jobs:
       - name: Show Java version
         if: startsWith(matrix.ruby, 'jruby')
         run: |
-          ruby -e "puts \"Java version: #{java.lang.System.getProperty('java.version')}\""
+          ruby -e "puts %Q(Java version: #{java.lang.System.getProperty(%q(java.version))})"
 
       - name: Run tests
         run: bundle exec rspec --format documentation spec/test_spec.rb
