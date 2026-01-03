@@ -12,9 +12,8 @@ on:
 
 jobs:
   build:
-    continue-on-error: false
-
     strategy:
+      fail-fast: false
       matrix:
         ruby: ["4.0", "jruby-10"]
         operating-system: [ubuntu-latest, windows-latest]
